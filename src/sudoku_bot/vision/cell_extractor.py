@@ -1,4 +1,8 @@
+from pathlib import Path
+
 import cv2
+
+from sudoku_bot.paths import DEBUG_CELLS_DIR
 
 
 def extract_cells(board_image):
@@ -32,11 +36,8 @@ def detect_occupied_cells(board_image) -> list[list[int]]:
     ]
 
 
-def save_debug_cells(board_image, output_dir: str = "tests/test_outputs/cells") -> None:
-    from pathlib import Path
-
-    path = Path(output_dir)
-    path.mkdir(parents=True, exist_ok=True)
+def save_debug_cells(board_image, output_dir: Path = DEBUG_CELLS_DIR) -> None:
+    output_dir.mkdir(parents=True, exist_ok=True)
     for row_index, row in enumerate(extract_cells(board_image), start=1):
         for col_index, cell in enumerate(row, start=1):
-            cv2.imwrite(str(path / f"r{row_index}_c{col_index}.png"), cell)
+            cv2.imwrite(str(output_dir / f"r{row_index}_c{col_index}.png"), cell)

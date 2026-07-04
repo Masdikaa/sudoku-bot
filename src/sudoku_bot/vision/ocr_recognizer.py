@@ -1,10 +1,11 @@
+from collections import Counter
 from pathlib import Path
 
 import cv2
 import pytesseract
-from collections import Counter
 
-from vision.cell_extractor import cell_has_number, extract_cells
+from sudoku_bot.paths import DEBUG_OCR_DIR
+from sudoku_bot.vision.cell_extractor import cell_has_number, extract_cells
 
 OCR_CONFIGS = [
     "--psm 13 --oem 3 -c tessedit_char_whitelist=123456789",
@@ -90,14 +91,13 @@ def _digit_hole_count(cell) -> int:
     return sum(1 for item in hierarchy[0] if item[3] != -1)
 
 
-def save_debug_ocr_cells(board_image, output_dir: str = "tests/test_outputs/ocr") -> None:
-    path = Path(output_dir)
-    path.mkdir(parents=True, exist_ok=True)
+def save_debug_ocr_cells(board_image, output_dir: Path = DEBUG_OCR_DIR) -> None:
+    output_dir.mkdir(parents=True, exist_ok=True)
     for row_index, row in enumerate(extract_cells(board_image), start=1):
         for col_index, cell in enumerate(row, start=1):
             image = preprocess_cell_for_ocr(cell)
             if image is not None:
-                cv2.imwrite(str(path / f"r{row_index}_c{col_index}.png"), image)
+                cv2.imwrite(str(output_dir / f"r{row_index}_c{col_index}.png"), image)
 
 
 def validate_board(board: list[list[int]]) -> None:

@@ -1,23 +1,36 @@
 from datetime import datetime
 from pathlib import Path
+from time import perf_counter
 
-from device.adb_client import capture_screenshot
-from sudoku.solver import solve_board, validate_board
-from vision.board_detector import extract_board
-from vision.cell_extractor import save_debug_cells
-from vision.ocr_recognizer import recognize_board, save_debug_ocr_cells
+from sudoku_bot.device.adb_client import capture_screenshot
+from sudoku_bot.paths import SCREENSHOTS_DIR
+from sudoku_bot.sudoku.solver import solve_board, validate_board
+from sudoku_bot.vision.board_detector import extract_board
+from sudoku_bot.vision.cell_extractor import save_debug_cells
+from sudoku_bot.vision.ocr_recognizer import recognize_board, save_debug_ocr_cells
 
 
 def capture_game_screenshot() -> Path:
     game_id = datetime.now().strftime("%Y%m%d_%H%M%S")
-    screenshot = Path(f"tests/test_inputs/game_{game_id}.png")
+    screenshot = SCREENSHOTS_DIR / f"game_{game_id}.png"
+    screenshot.parent.mkdir(parents=True, exist_ok=True)
     print("[1/7] Capturing screenshot from Android device...")
     screenshot.write_bytes(capture_screenshot())
     print(f"[1/7] Screenshot saved to {screenshot}")
     return screenshot
 
 
+def format_duration(seconds: float) -> str:
+    if seconds < 60:
+        return f"{seconds:.2f}s"
+
+    total_seconds = round(seconds)
+    minutes, remaining_seconds = divmod(total_seconds, 60)
+    return f"{minutes}.{remaining_seconds:02d}m"
+
+
 def main() -> None:
+    started_at = perf_counter()
     screenshot = capture_game_screenshot()
 
     print("[2/7] Extracting Sudoku board from screenshot...")
@@ -37,16 +50,19 @@ def main() -> None:
 
     print("[7/7] Solving Sudoku board...")
     solved = solve_board(numbers)
+    duration = perf_counter() - started_at
 
     print("Validation passed. Board has at least one solution.")
+    print()
+
     print(f"Detected board from {screenshot}:")
     for row in numbers:
         print(row)
 
+    print()
     print("Solved board:")
     for row in solved:
         print(row)
 
-
-if __name__ == "__main__":
-    main()
+    print()
+    print(f"Solved in {format_duration(duration)}")

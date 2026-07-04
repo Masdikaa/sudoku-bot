@@ -25,12 +25,12 @@ htmlcov/
 .note/
 .agent/
 
-# Local screenshot samples
-tests/test_inputs/*.png
-tests/test_inputs/*.jpg
-tests/test_inputs/*.jpeg
+# Runtime screenshots
+data/screenshots/*.png
+data/screenshots/*.jpg
+data/screenshots/*.jpeg
 
-# Local debug images
-tests/test_outputs/**/*.png
-tests/test_outputs/**/*.jpg
-tests/test_outputs/**/*.jpeg
+# Runtime debug images
+data/debug/**/*.png
+data/debug/**/*.jpg
+data/debug/**/*.jpeg
