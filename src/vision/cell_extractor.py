@@ -30,3 +30,13 @@ def detect_occupied_cells(board_image) -> list[list[int]]:
         [1 if cell_has_number(cell) else 0 for cell in row]
         for row in extract_cells(board_image)
     ]
+
+
+def save_debug_cells(board_image, output_dir: str = "tests/test_outputs/cells") -> None:
+    from pathlib import Path
+
+    path = Path(output_dir)
+    path.mkdir(parents=True, exist_ok=True)
+    for row_index, row in enumerate(extract_cells(board_image), start=1):
+        for col_index, cell in enumerate(row, start=1):
+            cv2.imwrite(str(path / f"r{row_index}_c{col_index}.png"), cell)

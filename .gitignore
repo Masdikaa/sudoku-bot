@@ -29,3 +29,8 @@ htmlcov/
 tests/test_inputs/*.png
 tests/test_inputs/*.jpg
 tests/test_inputs/*.jpeg
+
+# Local debug images
+tests/test_outputs/**/*.png
+tests/test_outputs/**/*.jpg
+tests/test_outputs/**/*.jpeg
