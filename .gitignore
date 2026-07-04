@@ -1,0 +1,31 @@
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+.venv/
+env/
+venv/
+
+# Test and coverage output
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Local environment files
+.env
+.env.*
+
+# Editor settings
+.vscode/
+.idea/
+
+# Local project notes and agent logs
+.note/
+.agent/
+
+# Local screenshot samples
+tests/test_inputs/*.png
+tests/test_inputs/*.jpg
+tests/test_inputs/*.jpeg
